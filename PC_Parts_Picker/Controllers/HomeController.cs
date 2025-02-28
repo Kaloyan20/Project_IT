@@ -49,7 +49,7 @@ public class HomeController : Controller
         return View(gpus);
     }
 
-    public IActionResult Rams()
+    public IActionResult Memory()
     {
         var rams = context.Rams.ToList();
         return View(rams);
