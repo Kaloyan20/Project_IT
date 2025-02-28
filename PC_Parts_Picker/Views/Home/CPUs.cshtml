@@ -42,10 +42,10 @@
                     <label for="priceFilter" class="form-label text-light">Max Price</label>
                     <select id="priceFilter" class="form-select">
                         <option value="">Any Price</option>
-                        <option value="200">Under $200</option>
-                        <option value="300">Under $300</option>
-                        <option value="500">Under $500</option>
-                        <option value="1000">Under $1000</option>
+                        <option value="200">Under 200 lv.</option>
+                        <option value="300">Under 300 lv.</option>
+                        <option value="500">Under 500 lv.</option>
+                        <option value="1000">Under 1000 lv.</option>
                     </select>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                             <td>@cpu.Brand</td>
                             <td>@cpu.Model</td>
                             <td>@cpu.SocketType</td>
-                            <td class="text-end">@(cpu.Price.HasValue ? $"${cpu.Price:F2}" : "N/A")</td>
+                            <td class="text-end">@(cpu.Price.HasValue ? $"{cpu.Price:F2} lv." : "N/A")</td>
                             <td class="text-center">
                                 <button class="btn btn-sm btn-outline-neon add-to-build" data-id="@cpu.Id">Add to Build</button>
                             </td>
@@ -152,7 +152,7 @@
         }
 
         .hero-section {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/motherboard-bg.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/CPU.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
