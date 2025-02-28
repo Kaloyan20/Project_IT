@@ -1,13 +1,13 @@
-﻿@model List<Data.Data.Cpu>
+﻿@model List<Data.Data.Ssd>
 @{
-    ViewData["Title"] = "CPUs";
+    ViewData["Title"] = "Storage (SSDs)";
 }
 
 <!-- Hero Section -->
 <section class="hero-section text-white py-5">
     <div class="container text-center py-5">
-        <h1 class="display-4 fw-bold mb-4 glow-text">CPUs</h1>
-        <p class="lead mb-4">Browse our selection of high-performance processors from top brands.</p>
+        <h1 class="display-4 fw-bold mb-4 glow-text">Storage (SSDs)</h1>
+        <p class="lead mb-4">Browse our selection of high-speed solid state drives.</p>
     </div>
 </section>
 
@@ -15,83 +15,73 @@
 <section class="py-4 bg-dark-purple">
     <div class="container">
         <div class="row">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4 mb-3">
                 <div class="cyber-filter">
-                    <label for="brandFilter" class="form-label text-light">Brand</label>
-                    <select id="brandFilter" class="form-select">
-                        <option value="">All Brands</option>
-                        <option value="AMD">AMD</option>
-                        <option value="Intel">Intel</option>
+                    <label for="storageFilter" class="form-label text-light">Storage Capacity</label>
+                    <select id="storageFilter" class="form-select">
+                        <option value="">All Capacities</option>
+                        <option value="240">240-256GB</option>
+                        <option value="500">500-512GB</option>
+                        <option value="1000">1TB</option>
+                        <option value="2000">2TB</option>
+                        <option value="4000">4TB+</option>
                     </select>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="cyber-filter">
-                    <label for="socketFilter" class="form-label text-light">Socket</label>
-                    <select id="socketFilter" class="form-select">
-                        <option value="">All Sockets</option>
-                        <option value="AM4">AM4</option>
-                        <option value="AM5">AM5</option>
-                        <option value="Intel 1700">Intel 1700</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4 mb-3">
                 <div class="cyber-filter">
                     <label for="priceFilter" class="form-label text-light">Max Price</label>
                     <select id="priceFilter" class="form-select">
                         <option value="">Any Price</option>
+                        <option value="100">Under 100 lv.</option>
                         <option value="200">Under 200 lv.</option>
-                        <option value="300">Under 300 lv.</option>
-                        <option value="500">Under 500 lv.</option>
-                        <option value="1000">Under 1000 lv.</option>
+                        <option value="400">Under 400 lv.</option>
+                        <option value="800">Under 800 lv.</option>
                     </select>
                 </div>
             </div>
-            <div class="col-md-3 mb-3 d-flex align-items-end">
+            <div class="col-md-4 mb-3 d-flex align-items-end">
                 <button id="applyFilters" class="btn btn-neon w-100">Apply Filters</button>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CPU Listings -->
+<!-- SSD Listings -->
 <section class="py-5 bg-darkest">
     <div class="container">
         <div class="cyber-table-container">
-            <table class="table cyber-table" id="cpuTable">
+            <table class="table cyber-table" id="ssdTable">
                 <thead>
                     <tr>
                         <th scope="col" class="text-center">Image</th>
-                        <th scope="col">Brand</th>
                         <th scope="col">Model</th>
-                        <th scope="col">Socket</th>
+                        <th scope="col">Storage Capacity</th>
                         <th scope="col" class="text-end">Price</th>
                         <th scope="col" class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var cpu in Model)
+                    @foreach (var ssd in Model)
                     {
-                        <tr data-brand="@cpu.Brand" data-socket="@cpu.SocketType" data-price="@cpu.Price">
+                        <tr data-storage="@ssd.Storage" data-price="@ssd.Price">
                             <td class="text-center">
                                 <div class="component-img-container">
-                                    @if (!string.IsNullOrEmpty(cpu.Image))
+                                    @if (!string.IsNullOrEmpty(ssd.Image))
                                     {
-                                        <img src="@cpu.Image" alt="@cpu.Model" class="component-img">
+                                        <img src="@ssd.Image" alt="@ssd.Model" class="component-img">
                                     }
                                     else
                                     {
-                                        <img src="/images/placeholder-cpu.png" alt="@cpu.Model" class="component-img">
+                                        <img src="/images/placeholder-ssd.png" alt="@ssd.Model" class="component-img">
                                     }
                                 </div>
                             </td>
-                            <td>@cpu.Brand</td>
-                            <td>@cpu.Model</td>
-                            <td>@cpu.SocketType</td>
-                            <td class="text-end">@(cpu.Price.HasValue ? $"{cpu.Price:F2} lv." : "N/A")</td>
+                            <td>@ssd.Model</td>
+                            <td>@(ssd.Storage.HasValue ? GetFormattedStorageSize(ssd.Storage.Value) : "N/A")</td>
+                            <td class="text-end">@(ssd.Price.HasValue ? $"{ssd.Price:F2} lv." : "N/A")</td>
                             <td class="text-center">
-                                <button class="btn btn-sm btn-outline-neon add-to-build" data-id="@cpu.Id">Add to Build</button>
+                                <button class="btn btn-sm btn-outline-neon add-to-build" data-id="@ssd.Id">Add to Build</button>
                             </td>
                         </tr>
                     }
@@ -105,20 +95,27 @@
     <script>
         $(document).ready(function () {
             $('#applyFilters').click(function () {
-                const brandFilter = $('#brandFilter').val();
-                const socketFilter = $('#socketFilter').val();
+                const storageFilter = parseInt($('#storageFilter').val()) || 0;
                 const priceFilter = parseFloat($('#priceFilter').val()) || Number.MAX_VALUE;
 
-                $('#cpuTable tbody tr').each(function () {
-                    const brand = $(this).data('brand');
-                    const socket = $(this).data('socket');
+                $('#ssdTable tbody tr').each(function () {
+                    const storage = parseInt($(this).data('storage')) || 0;
                     const price = parseFloat($(this).data('price')) || 0;
 
-                    const brandMatch = !brandFilter || brand === brandFilter;
-                    const socketMatch = !socketFilter || socket === socketFilter;
+                    // For storage filter, we handle ranges
+                    let storageMatch = true;
+                    if (storageFilter) {
+                        if (storageFilter == 240 && (storage >= 240 && storage <= 256)) storageMatch = true;
+                        else if (storageFilter == 500 && (storage >= 500 && storage <= 512)) storageMatch = true;
+                        else if (storageFilter == 1000 && (storage >= 960 && storage <= 1024)) storageMatch = true;
+                        else if (storageFilter == 2000 && (storage >= 1920 && storage <= 2048)) storageMatch = true;
+                        else if (storageFilter == 4000 && storage >= 3840) storageMatch = true;
+                        else storageMatch = storageFilter == storage;
+                    }
+
                     const priceMatch = price <= priceFilter;
 
-                    if (brandMatch && socketMatch && priceMatch) {
+                    if (storageMatch && priceMatch) {
                         $(this).show();
                     } else {
                         $(this).hide();
@@ -127,11 +124,18 @@
             });
 
             $('.add-to-build').click(function () {
-                const cpuId = $(this).data('id');
+                const ssdId = $(this).data('id');
                 // TODO: Implement add to build functionality
-                alert('Added CPU ID ' + cpuId + ' to your build');
+                alert('Added SSD ID ' + ssdId + ' to your build');
             });
         });
+
+        // Helper function to format storage size
+        function formatStorageSize(sizeInGB) {
+            if (sizeInGB >= 1) {
+                return (sizeInGB + 'TB');
+            } 
+        }
     </script>
 
     <style>
@@ -151,7 +155,7 @@
         }
 
         .hero-section {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/CPU.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/SSD.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -271,4 +275,15 @@
                 box-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
             }
     </style>
+}
+
+@functions {
+    public string GetFormattedStorageSize(int sizeGB)
+    {
+        if (sizeGB >= 1)
+        {
+            return $"{sizeGB}TB";
+        }
+        return $"{sizeGB} GB";
+    }
 }

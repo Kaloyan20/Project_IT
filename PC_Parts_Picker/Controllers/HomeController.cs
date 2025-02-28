@@ -51,14 +51,14 @@ public class HomeController : Controller
 
     public IActionResult Memory()
     {
-        var rams = context.Rams.ToList();
-        return View(rams);
+        var Memory = context.Rams.ToList();
+        return View(Memory);
     }
 
-    public IActionResult Ssds()
+    public IActionResult Storage()
     {
-        var ssds = context.Ssds.ToList();
-        return View(ssds);
+        var Storage = context.Ssds.ToList();
+        return View(Storage);
     }
 
     public IActionResult Psus()
