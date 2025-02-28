@@ -2,16 +2,16 @@
 @{
     ViewData["Title"] = "PC Components";
 
-    // Dictionary to store component categories and their icons
-    var componentCategories = new Dictionary<string, string>() {
-        { "CPUs", "fas fa-microchip" },
-        { "Motherboards", "fas fa-server" },
-        { "Graphics Cards", "fas fa-photo-video" },
-        { "Memory (RAM)", "fas fa-memory" },
-        { "Storage (SSDs)", "fas fa-hdd" },
-        { "Power Supplies", "fas fa-plug" },
-        { "Cases", "fas fa-desktop" },
-        { "Coolers", "fas fa-fan" }
+    // Dictionary to store component categories and their links and icons
+    var componentCategories = new Dictionary<string, (string link, string icon)>() {
+        { "CPUs", ("Cpus", "fas fa-microchip") },
+        { "Motherboards", ("Motherboards", "fas fa-server") },
+        { "Graphics Cards", ("Gpus", "fas fa-photo-video") },
+        { "Memory (RAM)", ("Rams", "fas fa-memory") },
+        { "Storage (SSDs)", ("Ssds", "fas fa-hdd") },
+        { "Power Supplies", ("Psus", "fas fa-plug") },
+        { "Cases", ("Cases", "fas fa-desktop") },
+        { "Coolers", ("Coolers", "fas fa-fan") }
     };
 }
 
@@ -31,10 +31,10 @@
             @foreach (var category in componentCategories)
             {
                 <div class="col-md-3 col-sm-6">
-                    <div class="card h-100 cyber-card border-0 category-card" onclick="navigateToSection('@category.Key.ToLower()')">
+                    <div class="card h-100 cyber-card border-0 category-card" onclick="window.location.href='@Url.Action(category.Value.link, "Home")'">
                         <div class="card-body text-center p-4">
                             <div class="display-4 text-neon mb-3">
-                                <i class="@category.Value"></i>
+                                <i class="@category.Value.icon"></i>
                             </div>
                             <h3 class="card-title h5 mb-3 text-cyan">@category.Key</h3>
                         </div>
@@ -50,13 +50,13 @@
     <div class="container text-center">
         <h2 class="text-neon mb-4">Ready to Start Building?</h2>
         <p class="lead mb-4 text-light">Use our system builder to create your custom PC with compatibility checking.</p>
-        <a href="@Url.Action("SystemBuilder", "Home")" class="btn btn-neon btn-lg">Go to System Builder</a>
+        <a href="@Url.Action("SystemBuilder", "Home")" class="btn btn-neon btn-lg" style="color: #00ffff; text-decoration: underline;" " >Go to System Builder</a>
     </div>
 </section>
 
 @section Scripts {
     <script>
-        // Function to navigate to a specific component section
+        // No longer needed as we're using direct links
         function navigateToSection(sectionId) {
             const section = document.getElementById(sectionId);
             if (section) {
@@ -70,9 +70,49 @@
 
     <style>
         /* Custom styles for Components page */
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
+            --neon-purple: #8a2be2;
+            --dark-purple: #1a1025;
+            --darkest: #0d0714;
+            --card-bg: #1e1636;
+        }
+
+        body {
+            background-color: var(--darkest);
+            color: #ffffff;
+        }
+
+        .hero-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/motherboard-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 75vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glow-text {
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.7), 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+
+        .bg-dark-purple {
+            background-color: var(--dark-purple);
+        }
+
+        .bg-darkest {
+            background-color: var(--darkest);
+        }
+
         .category-card {
             cursor: pointer;
             transition: all 0.3s ease;
+            background-color: var(--card-bg);
         }
 
             .category-card:hover {
@@ -82,6 +122,7 @@
 
         .component-card {
             transition: all 0.3s ease;
+            background-color: var(--card-bg);
         }
 
             .component-card:hover {
@@ -117,6 +158,14 @@
         .card-img-top {
             max-height: 180px;
             object-fit: contain;
+        }
+
+        .text-neon {
+            color: var(--neon-pink);
+        }
+
+        .text-cyan {
+            color: var(--neon-blue);
         }
     </style>
 }

@@ -68,6 +68,7 @@ body {
 }
 
 footer {
+    margin: 0 !important;
     background-color: var(--bs-secondary) !important;
 }
 
