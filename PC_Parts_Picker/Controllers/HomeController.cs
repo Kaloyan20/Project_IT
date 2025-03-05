@@ -61,7 +61,7 @@ public class HomeController : Controller
         return View(Storage);
     }
 
-    public IActionResult Psus()
+    public IActionResult PowerSupplies()
     {
         var psus = context.Psus.ToList();
         return View(psus);
