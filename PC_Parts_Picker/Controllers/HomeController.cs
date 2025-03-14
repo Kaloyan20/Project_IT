@@ -2,8 +2,7 @@ using System.Diagnostics;
 using Data;
 using Microsoft.AspNetCore.Mvc;
 using PC_Parts_Picker.Models;
-using Data.Data;
-using System.Linq;
+using Services;
 
 namespace PC_Parts_Picker.Controllers;
 
@@ -18,6 +17,8 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        Services.PCService pcService = new Services.PCService();
+        pcService.CreatePC();
         return View();
     }
 
