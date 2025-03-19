@@ -32,6 +32,30 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult SystemBuilder()
+    {
+        return View();
+    }
+
+    public IActionResult BuildResult()
+    {
+        var model = new SystemBuilderViewModel()
+        {
+            ShowResults = true,
+            BuildName = "My PC",
+            TotalPrice = 1000,
+            Cpu = context.Cpus.FirstOrDefault(),
+            Motherboard = context.Motherboards.FirstOrDefault(),
+            Gpu = context.Gpus.FirstOrDefault(),
+            Ram = context.Rams.FirstOrDefault(),
+            Ssd = context.Ssds.FirstOrDefault(),
+            Psu = context.Psus.FirstOrDefault(),
+            Case = context.Cases.FirstOrDefault(),
+            Cooler = context.Coolers.FirstOrDefault()
+        };
+        return View(model);
+    }
+
     public IActionResult Cpus()
     {
         var cpus = context.Cpus.ToList();
